@@ -29,8 +29,7 @@ export function LoginForm() {
         throw error;
       }
 
-      router.push("/dashboard");
-      router.refresh();
+      // Client-side auth component will handle the redirect
     } catch (error: unknown) {
       const authError = error as AuthError;
       setError(authError.message || "Failed to sign in");

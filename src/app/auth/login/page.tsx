@@ -1,8 +1,14 @@
+"use client";
+
 import { LoginForm } from "@/components/auth/LoginForm";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 export default function LoginPage() {
+  const searchParams = useSearchParams();
+  const message = searchParams.get("message");
+
   return (
     <div className="container flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] py-12">
       <Card className="w-full max-w-md">
@@ -13,6 +19,11 @@ export default function LoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          {message && (
+            <div className="mb-4 p-3 bg-blue-50 text-blue-700 text-sm rounded-md">
+              {message}
+            </div>
+          )}
           <LoginForm />
         </CardContent>
         <CardFooter className="flex flex-col gap-4 items-center">

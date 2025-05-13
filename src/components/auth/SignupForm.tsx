@@ -34,20 +34,19 @@ export function SignupForm() {
     }
 
     try {
+      // Simple signup, let the client-side auth handle redirects
       const { error } = await supabase.auth.signUp({
         email,
         password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/api/auth/callback`,
-        },
       });
 
       if (error) {
         throw error;
       }
 
-      // Navigate to login page with success message
-      router.push("/auth/login?message=Check your email to confirm your account");
+      // Simple success message and redirect to login
+      router.push("/auth/login?message=Account created successfully");
+      
     } catch (error: unknown) {
       const authError = error as AuthError;
       setError(authError.message || "Failed to sign up");
