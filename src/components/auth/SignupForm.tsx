@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/lib/supabase";
+import { AuthError } from "@supabase/supabase-js";
 
 export function SignupForm() {
   const router = useRouter();
@@ -37,7 +38,7 @@ export function SignupForm() {
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          emailRedirectTo: `${window.location.origin}/api/auth/callback`,
         },
       });
 
@@ -47,8 +48,9 @@ export function SignupForm() {
 
       // Navigate to login page with success message
       router.push("/auth/login?message=Check your email to confirm your account");
-    } catch (error: any) {
-      setError(error.message || "Failed to sign up");
+    } catch (error: unknown) {
+      const authError = error as AuthError;
+      setError(authError.message || "Failed to sign up");
     } finally {
       setLoading(false);
     }

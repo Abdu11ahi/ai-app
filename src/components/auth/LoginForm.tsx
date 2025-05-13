@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/lib/supabase";
+import { AuthError } from "@supabase/supabase-js";
 
 export function LoginForm() {
   const router = useRouter();
@@ -30,8 +31,9 @@ export function LoginForm() {
 
       router.push("/dashboard");
       router.refresh();
-    } catch (error: any) {
-      setError(error.message || "Failed to sign in");
+    } catch (error: unknown) {
+      const authError = error as AuthError;
+      setError(authError.message || "Failed to sign in");
     } finally {
       setLoading(false);
     }

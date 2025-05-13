@@ -13,7 +13,7 @@ export default function DashboardPage() {
         </CardHeader>
         <CardContent className="text-center">
           <p className="mb-4">
-            You're logged in and can see this protected content.
+            You&apos;re logged in and can see this protected content.
           </p>
         </CardContent>
         <CardFooter className="flex justify-center">

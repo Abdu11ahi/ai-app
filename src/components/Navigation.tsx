@@ -5,10 +5,11 @@ import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import type { User } from '@supabase/supabase-js';
 
 export function Navigation() {
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
