@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -15,7 +16,9 @@ export default function Home() {
           </p>
         </CardContent>
         <CardFooter className="flex justify-center">
-          <Button className="w-full">Login to continue</Button>
+          <Link href="/auth/login" className="w-full">
+            <Button className="w-full">Login to continue</Button>
+          </Link>
         </CardFooter>
       </Card>
     </div>
