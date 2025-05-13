@@ -23,7 +23,12 @@ export function ClientAuthProtection({ children }: ClientAuthProtectionProps) {
         setIsAuthenticated(isAuth);
 
         // Redirect logic
-        if (isAuth && (pathname === '/auth/login' || pathname === '/auth/signup')) {
+        const authPaths = [
+          '/auth/login', 
+          '/auth/signup'
+        ];
+        
+        if (isAuth && authPaths.includes(pathname)) {
           router.push('/dashboard');
         } else if (!isAuth && pathname === '/dashboard') {
           router.push('/auth/login');
@@ -43,7 +48,12 @@ export function ClientAuthProtection({ children }: ClientAuthProtectionProps) {
       setIsAuthenticated(isAuth);
       
       // Redirect logic on auth change
-      if (isAuth && (pathname === '/auth/login' || pathname === '/auth/signup')) {
+      const authPaths = [
+        '/auth/login', 
+        '/auth/signup'
+      ];
+      
+      if (isAuth && authPaths.includes(pathname)) {
         router.push('/dashboard');
       } else if (!isAuth && pathname === '/dashboard') {
         router.push('/auth/login');

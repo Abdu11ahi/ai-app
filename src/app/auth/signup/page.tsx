@@ -1,9 +1,9 @@
 "use client";
 
-import { SignupForm } from "@/components/auth/SignupForm";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { OAuthButtons } from "@/components/auth/OAuthButtons";
 
 export default function SignupPage() {
   const searchParams = useSearchParams();
@@ -15,16 +15,21 @@ export default function SignupPage() {
         <CardHeader>
           <CardTitle className="text-2xl text-center">Sign Up</CardTitle>
           <CardDescription className="text-center">
-            Create an account to get started
+            Create an account with a social provider
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-6">
           {message && (
-            <div className="mb-4 p-3 bg-blue-50 text-blue-700 text-sm rounded-md">
+            <div className="p-3 bg-blue-50 text-blue-700 text-sm rounded-md">
               {message}
             </div>
           )}
-          <SignupForm />
+
+          <OAuthButtons />
+          
+          <div className="text-xs text-center text-muted-foreground">
+            By signing up, you agree to our Terms of Service and Privacy Policy
+          </div>
         </CardContent>
         <CardFooter className="flex flex-col gap-4 items-center">
           <div className="text-sm text-muted-foreground">
