@@ -1,14 +1,15 @@
 import { Suspense } from "react";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { RetroDetails } from "@/components/retrospectives/RetroDetails";
 import { FeedbackForm } from "@/components/retrospectives/FeedbackForm";
 import { FeedbackList } from "@/components/retrospectives/FeedbackList";
-import { RetroDetails } from "@/components/retrospectives/RetroDetails";
+import { use } from "react";
 
-// Simple server component that just passes the ID to client components
-export default function RetroPage({ params }: { params: { id: string } }) {
-  const { id } = params;
-  
+export default function RetroPage({ params }: { params: Promise<{ id: string }> }) {
+  // Use React.use to unwrap the params Promise
+  const { id } = use(params);
+
   return (
     <div className="container py-8">
       <div className="mb-4">

@@ -1,18 +1,36 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 
+// Define a type for the test insert result
+type TestInsertResult = {
+  success: boolean;
+  error: string | null;
+  approach?: string;
+};
+
 export async function GET() {
   try {
     // Try a direct SQL approach to get table information
-    const { data: tableInfo, error: tableError } = await supabase.rpc(
-      'debug_feedback_table',
-      {},
-      { count: 'exact' }
-    ).catch(() => {
-      // Create the function if it doesn't exist
-      return supabase.rpc('create_debug_function').catch(() => {
+    let tableInfo;
+    let tableError;
+    
+    try {
+      const result = await supabase.rpc(
+        'debug_feedback_table',
+        {},
+        { count: 'exact' }
+      );
+      tableInfo = result.data;
+      tableError = result.error;
+    } catch (error) {
+      // Function doesn't exist, try to create it
+      try {
+        const createResult = await supabase.rpc('create_debug_function');
+        tableInfo = createResult.data;
+        tableError = createResult.error;
+      } catch (createError) {
         // If we can't create the function, use direct SQL
-        return supabase.rpc(
+        const directSqlResult = await supabase.rpc(
           'exec',
           { 
             query: `
@@ -23,8 +41,10 @@ export async function GET() {
             `
           }
         );
-      });
-    });
+        tableInfo = directSqlResult.data;
+        tableError = directSqlResult.error;
+      }
+    }
 
     // Try to refresh schema cache
     await supabase.from('feedback').select('id').limit(1).maybeSingle();
@@ -40,7 +60,7 @@ export async function GET() {
     const userId = sessionData?.session?.user?.id;
     
     // Try a test insert with a simpler approach
-    let testInsertResult = { success: false, error: 'Not attempted (no user)' };
+    let testInsertResult: TestInsertResult = { success: false, error: 'Not attempted (no user)' };
     
     if (userId) {
       try {
