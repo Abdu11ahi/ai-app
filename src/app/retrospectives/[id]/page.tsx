@@ -9,14 +9,13 @@ import { supabase } from "@/lib/supabase";
 import { Database } from "@/lib/database.types";
 import { FeedbackForm } from "@/components/retrospectives/FeedbackForm";
 import { FeedbackList } from "@/components/retrospectives/FeedbackList";
-import { use } from "react";
 
 type Retrospective = Database["public"]["Tables"]["retrospectives"]["Row"];
 
-export default function RetroPage({ params }: { params: Promise<{ id: string }> | { id: string } }) {
-  // Unwrap params if it's a Promise
-  const resolvedParams = params instanceof Promise ? use(params) : params;
-  const { id } = resolvedParams;
+// Properly type the params according to Next.js 15.x typings
+export default function RetroPage({ params }: { params: { id: string } }) {
+  // Get the ID directly without trying to handle it as a Promise
+  const { id } = params;
   
   const router = useRouter();
   const [retro, setRetro] = useState<Retrospective | null>(null);
