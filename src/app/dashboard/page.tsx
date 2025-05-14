@@ -22,6 +22,9 @@ export default function DashboardPage() {
             <Link href="/retrospectives/new">
               <Button className="w-full">Create New Retrospective</Button>
             </Link>
+            <Link href="/dashboard/feedback">
+              <Button className="w-full" variant="outline">View Feedback Dashboard</Button>
+            </Link>
           </div>
         </CardContent>
         <CardFooter className="flex justify-center">

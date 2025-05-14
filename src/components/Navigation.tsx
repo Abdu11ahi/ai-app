@@ -60,6 +60,9 @@ export function Navigation() {
                   <Link href="/retrospectives">
                     <Button variant="ghost">Retrospectives</Button>
                   </Link>
+                  <Link href="/dashboard/feedback">
+                    <Button variant="ghost">Feedback Dashboard</Button>
+                  </Link>
                   <Link href="/retrospectives/new">
                     <Button variant="ghost">New Retro</Button>
                   </Link>
