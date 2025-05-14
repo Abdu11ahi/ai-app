@@ -1,5 +1,7 @@
 import { LogoutButton } from "@/components/auth/LogoutButton";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function DashboardPage() {
   return (
@@ -15,6 +17,12 @@ export default function DashboardPage() {
           <p className="mb-4">
             You&apos;re logged in and can see this protected content.
           </p>
+          
+          <div className="flex flex-col items-center gap-4 mt-6">
+            <Link href="/retrospectives/new">
+              <Button className="w-full">Create New Retrospective</Button>
+            </Link>
+          </div>
         </CardContent>
         <CardFooter className="flex justify-center">
           <LogoutButton />

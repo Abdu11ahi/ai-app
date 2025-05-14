@@ -57,6 +57,12 @@ export function Navigation() {
                   <Link href="/dashboard">
                     <Button variant="ghost">Dashboard</Button>
                   </Link>
+                  <Link href="/retrospectives">
+                    <Button variant="ghost">Retrospectives</Button>
+                  </Link>
+                  <Link href="/retrospectives/new">
+                    <Button variant="ghost">New Retro</Button>
+                  </Link>
                   <Button variant="outline" onClick={handleLogout}>
                     Logout
                   </Button>
