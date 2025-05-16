@@ -16,7 +16,7 @@ export default function Home() {
           </p>
         </CardContent>
         <CardFooter className="flex justify-center">
-          <Link href="/auth/signup" className="w-full">
+          <Link href="/auth/login" className="w-full">
             <Button className="w-full">Continue with Google, Apple, or GitHub</Button>
           </Link>
         </CardFooter>

@@ -14,14 +14,16 @@ export function OAuthButtons() {
     try {
       setIsLoading(provider);
       
+      // Get the current host - will work in both development and production
+      const callbackUrl = `${window.location.origin}/api/auth/callback`;
+      
+      console.log(`OAuth redirect URL: ${callbackUrl}`);
+      
       await supabase.auth.signInWithOAuth({
         provider,
         options: {
-          redirectTo: `${window.location.origin}/api/auth/callback`,
-          queryParams: {
-            // Add this to help debug
-            debug_redirectTo: window.location.origin
-          }
+          redirectTo: callbackUrl,
+          // Remove debug param as it's not needed and may cause issues
         }
       });
       

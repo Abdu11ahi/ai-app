@@ -126,7 +126,7 @@ export function Header() {
                   Sign In
                 </Link>
                 <Link
-                  href="/auth/register"
+                  href="/auth/login"
                   className="text-sm font-medium bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700"
                 >
                   Sign Up
@@ -203,7 +203,7 @@ export function Header() {
                     Sign In
                   </Link>
                   <Link
-                    href="/auth/register"
+                    href="/auth/login"
                     className="block text-sm font-medium bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700 text-center"
                     onClick={() => setIsMenuOpen(false)}
                   >

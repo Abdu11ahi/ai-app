@@ -1,122 +1,45 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
-import { supabase } from "@/lib/supabase";
-import { Loader2 } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { OAuthButtons } from "@/components/auth/OAuthButtons";
 
 export default function LoginPage() {
-  const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) {
-        throw error;
-      }
-
-      router.push("/dashboard");
-      router.refresh();
-    } catch (error: any) {
-      setError(error.message || "Failed to log in");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const searchParams = useSearchParams();
+  const message = searchParams.get("message");
 
   return (
-    <div className="container max-w-md mx-auto py-12">
-      <div className="space-y-6">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold">Welcome Back</h1>
-          <p className="text-muted-foreground mt-2">
-            Sign in to your account to continue
-          </p>
-        </div>
-
-        <form onSubmit={handleLogin} className="space-y-4">
-          {error && (
-            <div className="bg-red-50 text-red-700 p-3 rounded-md text-sm">
-              {error}
+    <div className="container flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] py-12">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="text-2xl text-center">Welcome Back</CardTitle>
+          <CardDescription className="text-center">
+            Sign in to your account with a social provider
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {message && (
+            <div className="p-3 bg-blue-50 text-blue-700 text-sm rounded-md">
+              {message}
             </div>
           )}
 
-          <div className="space-y-2">
-            <label htmlFor="email" className="text-sm font-medium">
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full p-2 border rounded-md"
-              placeholder="you@example.com"
-            />
+          <OAuthButtons />
+          
+          <div className="text-xs text-center text-muted-foreground">
+            By signing in, you agree to our Terms of Service and Privacy Policy
           </div>
-
-          <div className="space-y-2">
-            <div className="flex justify-between">
-              <label htmlFor="password" className="text-sm font-medium">
-                Password
-              </label>
-              <Link
-                href="/auth/reset-password"
-                className="text-sm text-blue-600 hover:underline"
-              >
-                Forgot password?
-              </Link>
-            </div>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full p-2 border rounded-md"
-              placeholder="••••••••"
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 transition-colors flex justify-center"
-          >
-            {loading ? (
-              <Loader2 className="h-5 w-5 animate-spin" />
-            ) : (
-              "Sign in"
-            )}
-          </button>
-        </form>
-
-        <div className="text-center text-sm">
-          <p>
+        </CardContent>
+        <CardFooter className="flex flex-col gap-4 items-center">
+          <div className="text-sm text-muted-foreground">
             Don't have an account?{" "}
-            <Link
-              href="/auth/register"
-              className="text-blue-600 hover:underline"
-            >
+            <Link href="/auth/signup" className="text-primary hover:underline">
               Sign up
             </Link>
-          </p>
-        </div>
-      </div>
+          </div>
+        </CardFooter>
+      </Card>
     </div>
   );
 } 

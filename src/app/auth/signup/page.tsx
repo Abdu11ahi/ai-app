@@ -2,12 +2,19 @@
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { OAuthButtons } from "@/components/auth/OAuthButtons";
+import { useEffect } from "react";
 
 export default function SignupPage() {
   const searchParams = useSearchParams();
   const message = searchParams.get("message");
+  const router = useRouter();
+  
+  // Redirect to login page as we only want users to use login for both signup and login
+  useEffect(() => {
+    router.replace("/auth/login");
+  }, [router]);
 
   return (
     <div className="container flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] py-12">
