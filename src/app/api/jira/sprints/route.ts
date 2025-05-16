@@ -4,8 +4,8 @@ import { cookies } from 'next/headers';
 export async function GET(request: Request) {
   try {
     // Get Jira credentials from cookie
-    const cookieStore = cookies();
-    const jiraCookie = cookieStore.get('jira_credentials');
+    const cookieJar = await cookies();
+    const jiraCookie = cookieJar.get('jira_credentials');
     
     if (!jiraCookie) {
       return NextResponse.json({ error: 'Jira authentication required' }, { status: 401 });

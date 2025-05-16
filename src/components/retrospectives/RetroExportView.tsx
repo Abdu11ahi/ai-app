@@ -176,7 +176,7 @@ export const RetroExportView = forwardRef<HTMLDivElement, RetroExportViewProps>(
                             </p>
                           )}
                         </div>
-                        {(item.reactions?.thumbsup > 0 || item.reactions?.thumbsdown > 0) && (
+                        {(item.reactions && (item.reactions?.thumbsup || 0) > 0 || item.reactions && (item.reactions?.thumbsdown || 0) > 0) && (
                           <div
                             style={{
                               display: 'flex',
@@ -186,7 +186,7 @@ export const RetroExportView = forwardRef<HTMLDivElement, RetroExportViewProps>(
                               color: '#666',
                             }}
                           >
-                            {item.reactions?.thumbsup > 0 && (
+                            {item.reactions && (item.reactions.thumbsup || 0) > 0 && (
                               <div
                                 style={{
                                   display: 'flex',
@@ -198,7 +198,7 @@ export const RetroExportView = forwardRef<HTMLDivElement, RetroExportViewProps>(
                                 <span>{item.reactions.thumbsup}</span>
                               </div>
                             )}
-                            {item.reactions?.thumbsdown > 0 && (
+                            {item.reactions && (item.reactions.thumbsdown || 0) > 0 && (
                               <div
                                 style={{
                                   display: 'flex',
@@ -305,7 +305,7 @@ export const RetroExportView = forwardRef<HTMLDivElement, RetroExportViewProps>(
                             </p>
                           )}
                         </div>
-                        {(item.reactions?.thumbsup > 0 || item.reactions?.thumbsdown > 0) && (
+                        {(item.reactions && (item.reactions?.thumbsup || 0) > 0 || item.reactions && (item.reactions?.thumbsdown || 0) > 0) && (
                           <div
                             style={{
                               display: 'flex',
@@ -315,7 +315,7 @@ export const RetroExportView = forwardRef<HTMLDivElement, RetroExportViewProps>(
                               color: '#666',
                             }}
                           >
-                            {item.reactions?.thumbsup > 0 && (
+                            {item.reactions && (item.reactions.thumbsup || 0) > 0 && (
                               <div
                                 style={{
                                   display: 'flex',
@@ -327,7 +327,7 @@ export const RetroExportView = forwardRef<HTMLDivElement, RetroExportViewProps>(
                                 <span>{item.reactions.thumbsup}</span>
                               </div>
                             )}
-                            {item.reactions?.thumbsdown > 0 && (
+                            {item.reactions && (item.reactions.thumbsdown || 0) > 0 && (
                               <div
                                 style={{
                                   display: 'flex',
@@ -434,7 +434,7 @@ export const RetroExportView = forwardRef<HTMLDivElement, RetroExportViewProps>(
                             </p>
                           )}
                         </div>
-                        {(item.reactions?.thumbsup > 0 || item.reactions?.thumbsdown > 0) && (
+                        {(item.reactions && (item.reactions?.thumbsup || 0) > 0 || item.reactions && (item.reactions?.thumbsdown || 0) > 0) && (
                           <div
                             style={{
                               display: 'flex',
@@ -444,7 +444,7 @@ export const RetroExportView = forwardRef<HTMLDivElement, RetroExportViewProps>(
                               color: '#666',
                             }}
                           >
-                            {item.reactions?.thumbsup > 0 && (
+                            {item.reactions && (item.reactions.thumbsup || 0) > 0 && (
                               <div
                                 style={{
                                   display: 'flex',
@@ -456,7 +456,7 @@ export const RetroExportView = forwardRef<HTMLDivElement, RetroExportViewProps>(
                                 <span>{item.reactions.thumbsup}</span>
                               </div>
                             )}
-                            {item.reactions?.thumbsdown > 0 && (
+                            {item.reactions && (item.reactions.thumbsdown || 0) > 0 && (
                               <div
                                 style={{
                                   display: 'flex',
@@ -563,7 +563,7 @@ export const RetroExportView = forwardRef<HTMLDivElement, RetroExportViewProps>(
                             </p>
                           )}
                         </div>
-                        {(item.reactions?.thumbsup > 0 || item.reactions?.thumbsdown > 0) && (
+                        {(item.reactions && (item.reactions?.thumbsup || 0) > 0 || item.reactions && (item.reactions?.thumbsdown || 0) > 0) && (
                           <div
                             style={{
                               display: 'flex',
@@ -573,7 +573,7 @@ export const RetroExportView = forwardRef<HTMLDivElement, RetroExportViewProps>(
                               color: '#666',
                             }}
                           >
-                            {item.reactions?.thumbsup > 0 && (
+                            {item.reactions && (item.reactions.thumbsup || 0) > 0 && (
                               <div
                                 style={{
                                   display: 'flex',
@@ -585,7 +585,7 @@ export const RetroExportView = forwardRef<HTMLDivElement, RetroExportViewProps>(
                                 <span>{item.reactions.thumbsup}</span>
                               </div>
                             )}
-                            {item.reactions?.thumbsdown > 0 && (
+                            {item.reactions && (item.reactions.thumbsdown || 0) > 0 && (
                               <div
                                 style={{
                                   display: 'flex',

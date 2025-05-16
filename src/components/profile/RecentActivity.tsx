@@ -86,68 +86,85 @@ export function RecentActivity({ userId }: RecentActivityProps) {
         
         if (reactionsError) throw reactionsError;
         
-        // Process all activity items
-        const activityItems: ActivityItem[] = [
-          // Process retros
-          ...(retros || []).map(retro => ({
-            id: `retro-${retro.id}`,
-            type: "retro",
-            title: `Created a retrospective`,
-            description: retro.sprint_name ? 
-              `Created "${retro.sprint_name}"` : 
-              `Created Sprint ${retro.sprint_number} retrospective`,
-            date: retro.created_at,
-            meta: {
-              teamName: retro.team_name,
-              sprintName: retro.sprint_name || `Sprint ${retro.sprint_number}`
-            }
-          })),
-          
-          // Process feedback
-          ...(feedback || []).map(item => ({
-            id: `feedback-${item.id}`,
-            type: "feedback",
-            title: `Added ${item.type} feedback`,
-            description: item.message.length > 60 ? 
-              `${item.message.substring(0, 60)}...` : 
-              item.message,
-            date: item.created_at,
-            meta: {
-              feedbackType: item.type,
-              teamName: item.retrospectives?.team_name,
-              sprintName: item.retrospectives?.sprint_name || 
-                (item.retrospectives?.sprint_number ? 
-                  `Sprint ${item.retrospectives.sprint_number}` : undefined)
-            }
-          })),
-          
-          // Process reactions
-          ...(reactions || []).map(item => ({
-            id: `reaction-${item.id}`,
-            type: "reaction",
-            title: `Reacted to feedback`,
-            description: item.feedback?.message ? 
-              (item.feedback.message.length > 60 ? 
-                `${item.feedback.message.substring(0, 60)}...` : 
-                item.feedback.message) : 
-              "Feedback item",
-            date: item.created_at,
-            meta: {
-              reactionType: item.reaction_type,
-              teamName: item.feedback?.retrospectives?.team_name,
-              sprintName: item.feedback?.retrospectives?.sprint_name || 
-                (item.feedback?.retrospectives?.sprint_number ? 
-                  `Sprint ${item.feedback.retrospectives.sprint_number}` : undefined)
-            }
-          }))
-        ];
+        // Process activity items
+        const items: ActivityItem[] = [];
+        
+        // Process retros
+        if (retros) {
+          for (const retro of retros) {
+            items.push({
+              id: `retro-${retro.id}`,
+              type: "retro",
+              title: "Created a retrospective",
+              description: retro.sprint_name ? 
+                `Created "${retro.sprint_name}"` : 
+                `Created Sprint ${retro.sprint_number} retrospective`,
+              date: retro.created_at,
+              meta: {
+                teamName: retro.team_name,
+                sprintName: retro.sprint_name || `Sprint ${retro.sprint_number}`
+              }
+            });
+          }
+        }
+        
+        // Process feedback
+        if (feedback) {
+          for (const item of feedback) {
+            const retro = item.retrospectives?.[0];
+            items.push({
+              id: `feedback-${item.id}`,
+              type: "feedback",
+              title: `Added ${item.type} feedback`,
+              description: item.message?.length > 60 ? 
+                `${item.message.substring(0, 60)}...` : 
+                item.message || "",
+              date: item.created_at,
+              meta: {
+                feedbackType: item.type,
+                teamName: retro?.team_name,
+                sprintName: retro?.sprint_name || 
+                  (retro?.sprint_number ? 
+                    `Sprint ${retro.sprint_number}` : undefined)
+              }
+            });
+          }
+        }
+        
+        // Process reactions
+        if (reactions) {
+          for (const item of reactions) {
+            // Access nested data carefully with proper type checking
+            const feedbackData = item.feedback as any;
+            const retroData = feedbackData?.retrospectives?.[0];
+            
+            items.push({
+              id: `reaction-${item.id}`,
+              type: "reaction",
+              title: "Reacted to feedback",
+              description: feedbackData?.message ? 
+                (feedbackData.message.length > 60 ? 
+                  `${feedbackData.message.substring(0, 60)}...` : 
+                  feedbackData.message) : 
+                "Feedback item",
+              date: item.created_at,
+              meta: {
+                reactionType: item.reaction_type,
+                teamName: retroData?.team_name,
+                sprintName: retroData?.sprint_name || 
+                  (retroData?.sprint_number ? 
+                    `Sprint ${retroData.sprint_number}` : undefined)
+              }
+            });
+          }
+        }
         
         // Sort by date
-        activityItems.sort((a, b) => 
+        items.sort((a, b) => 
           new Date(b.date).getTime() - new Date(a.date).getTime()
         );
         
-        setActivities(activityItems);
+        setActivities(items);
       } catch (error) {
         console.error("Error fetching activity:", error);
       } finally {

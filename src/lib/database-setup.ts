@@ -41,7 +41,7 @@ export const checkDatabaseSetup = async (): Promise<boolean> => {
     
     console.log(`Profiles table exists with ${count} rows`);
     
-    return count > 0;
+    return count !== null && count > 0;
   } catch (error) {
     console.error("Error checking database setup:", error);
     return false;

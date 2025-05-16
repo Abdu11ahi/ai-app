@@ -37,7 +37,7 @@ import { exportToPDF, exportToMarkdown, downloadFile, shareToNotion, type RetroE
 interface ExportSummaryProps {
   retroId: string;
   retroData: RetroExportData;
-  contentRef: React.RefObject<HTMLElement>;
+  contentRef: React.RefObject<HTMLElement | null>;
 }
 
 export function ExportSummary({ retroId, retroData, contentRef }: ExportSummaryProps) {

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import OpenAI from 'openai';
-import * as kmeans from 'kmeans-ts';
+import { kmeans } from '@thi.ng/k-means';
 import { Database } from '@/lib/database.types';
 
 // Types for our data
@@ -146,8 +146,25 @@ function clusterEmbeddings(embeddings: number[][], numClusters: number) {
     return embeddings.map((_, i) => i);
   }
 
-  const { clusters } = kmeans.kmeans(embeddings, numClusters);
-  return clusters;
+  try {
+    // Run kmeans clustering
+    const clusters = kmeans(numClusters, embeddings);
+    
+    // Map each embedding to its cluster ID
+    return embeddings.map((_, i) => {
+      // Find which cluster contains this item index
+      for (const cluster of clusters) {
+        if (cluster.items.includes(i)) {
+          return cluster.id;
+        }
+      }
+      return 0; // Fallback to first cluster if not found
+    });
+  } catch (err) {
+    console.error("K-means clustering error:", err);
+    // Fallback: assign each item to a cluster in a round-robin fashion
+    return embeddings.map((_, i) => i % numClusters);
+  }
 }
 
 // Get a good name for each cluster based on the most central feedback
@@ -237,6 +254,11 @@ export async function POST(request: Request) {
     
     // Get feedback items for the given retro and optional type
     try {
+      // Ensure supabase client is defined
+      if (!supabase) {
+        throw new Error("Supabase client is undefined");
+      }
+      
       const query = supabase
         .from('feedback')
         .select('*')
@@ -319,6 +341,10 @@ export async function POST(request: Request) {
       // Save themes to database
       try {
         console.log("Saving themes to database...");
+        if (!supabase) {
+          throw new Error("Supabase client is undefined");
+        }
+        
         const { data: savedThemes, error: saveError } = await supabase
           .from('feedback_themes')
           .upsert(

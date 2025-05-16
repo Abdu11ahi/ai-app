@@ -46,26 +46,33 @@ export async function POST(request: Request) {
     
     // Store encrypted credentials temporarily in a secure cookie
     // In a production app, you'd want to store these securely in a database
-    const cookieStore = cookies();
-    cookieStore.set('jira_credentials', JSON.stringify({
+    const cookieData = JSON.stringify({
       username,
       apiToken,
       domain,
       displayName: jiraUser.displayName
-    }), { 
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 60 * 30, // 30 minutes
-      path: '/'
     });
     
-    return NextResponse.json({ 
+    // Create a response with the data
+    const apiResponse = NextResponse.json({ 
       success: true, 
       user: {
         displayName: jiraUser.displayName,
         emailAddress: jiraUser.emailAddress
       }
     });
+    
+    // Set the cookie on the response
+    apiResponse.cookies.set({
+      name: 'jira_credentials',
+      value: cookieData,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 60 * 30, // 30 minutes
+      path: '/'
+    });
+    
+    return apiResponse;
   } catch (error) {
     console.error('Jira auth error:', error);
     return NextResponse.json({ 

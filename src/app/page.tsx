@@ -7,8 +7,8 @@ export default function Home() {
     <div className="container flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] py-12">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-2xl text-center">Welcome to AI App</CardTitle>
-          <CardDescription className="text-center">Your intelligent assistant</CardDescription>
+          <CardTitle className="text-2xl text-center">Welcome to RetroApp</CardTitle>
+          <CardDescription className="text-center">Your retrospective assistant</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col items-center">
           <p className="mb-6 text-center text-muted-foreground">
@@ -16,7 +16,7 @@ export default function Home() {
           </p>
         </CardContent>
         <CardFooter className="flex justify-center">
-          <Link href="/auth/login" className="w-full">
+          <Link href="/auth/signup" className="w-full">
             <Button className="w-full">Continue with Google, Apple, or GitHub</Button>
           </Link>
         </CardFooter>
