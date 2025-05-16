@@ -54,7 +54,17 @@ export default function FeedbackDashboardPage() {
         
       if (error) throw error;
       
-      setFeedbackItems(data || []);
+      // Process the data to handle the retro array properly
+      const processedData = (data || []).map(item => ({
+        id: item.id,
+        message: item.message,
+        type: item.type,
+        created_at: item.created_at,
+        // Extract the first item from the retro array if it exists
+        retro: item.retro && item.retro.length > 0 ? item.retro[0] : null
+      }));
+      
+      setFeedbackItems(processedData);
     } catch (err: any) {
       console.error("Error fetching feedback:", err);
       setError(err.message || "Failed to load feedback");
@@ -148,7 +158,7 @@ export default function FeedbackDashboardPage() {
                     {item.message}
                   </p>
                   <p className="text-sm text-gray-500">
-                    {item.retro?.sprint_name || `Sprint ${item.retro?.sprint_number}`}
+                    {item.retro?.sprint_name || (item.retro?.sprint_number ? `Sprint ${item.retro.sprint_number}` : 'Unknown Sprint')}
                     {' • '}
                     {new Date(item.created_at).toLocaleString()}
                   </p>
