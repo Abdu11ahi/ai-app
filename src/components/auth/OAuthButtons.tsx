@@ -14,16 +14,21 @@ export function OAuthButtons() {
     try {
       setIsLoading(provider);
       
-      // Get the current host - will work in both development and production
-      const callbackUrl = `${window.location.origin}/api/auth/callback`;
+      // Determine if we're in production or development
+      const isProd = window.location.origin.includes('vercel.app');
       
+      // Set the redirect URL based on environment
+      const callbackUrl = isProd 
+        ? `https://ai-app-wine.vercel.app/api/auth/callback`
+        : `${window.location.origin}/api/auth/callback`;
+      
+      console.log(`Environment: ${isProd ? 'Production' : 'Development'}`);
       console.log(`OAuth redirect URL: ${callbackUrl}`);
       
       await supabase.auth.signInWithOAuth({
         provider,
         options: {
           redirectTo: callbackUrl,
-          // Remove debug param as it's not needed and may cause issues
         }
       });
       
