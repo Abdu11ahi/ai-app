@@ -7,6 +7,8 @@ export type Json =
   | Json[]
 
 export type FeedbackType = 'well' | 'didnt' | 'suggestion' | 'blocker';
+export type ReactionType = 'thumbsup' | 'thumbsdown';
+export type SentimentScore = 'positive' | 'negative' | 'neutral';
 
 export interface Database {
   public: {
@@ -16,6 +18,7 @@ export interface Database {
           id: string
           created_at: string
           sprint_number: number
+          sprint_name: string | null
           team_name: string
           user_id: string
         }
@@ -23,6 +26,7 @@ export interface Database {
           id?: string
           created_at?: string
           sprint_number: number
+          sprint_name?: string | null
           team_name: string
           user_id: string
         }
@@ -30,6 +34,7 @@ export interface Database {
           id?: string
           created_at?: string
           sprint_number?: number
+          sprint_name?: string | null
           team_name?: string
           user_id?: string
         }
@@ -43,6 +48,7 @@ export interface Database {
           message: string
           anonymous: boolean
           created_at: string
+          sentiment?: SentimentScore | null
         }
         Insert: {
           id?: string
@@ -52,6 +58,7 @@ export interface Database {
           message: string
           anonymous: boolean
           created_at?: string
+          sentiment?: SentimentScore | null
         }
         Update: {
           id?: string
@@ -61,6 +68,56 @@ export interface Database {
           message?: string
           anonymous?: boolean
           created_at?: string
+          sentiment?: SentimentScore | null
+        }
+      }
+      feedback_reactions: {
+        Row: {
+          id: string
+          feedback_id: string
+          user_id: string
+          reaction_type: ReactionType
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          feedback_id: string
+          user_id: string
+          reaction_type: ReactionType
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          feedback_id?: string
+          user_id?: string
+          reaction_type?: ReactionType
+          created_at?: string
+        }
+      }
+      profiles: {
+        Row: {
+          id: string
+          email: string
+          full_name: string | null
+          avatar_url: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id: string
+          email: string
+          full_name?: string | null
+          avatar_url?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          email?: string
+          full_name?: string | null
+          avatar_url?: string | null
+          created_at?: string
+          updated_at?: string
         }
       }
     }

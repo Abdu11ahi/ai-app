@@ -22,13 +22,15 @@ type Feedback = {
   retro_id: string;
   retro?: {
     sprint_number: number;
+    sprint_name: string | null;
     team_name: string;
   } | null;
 };
 
 type Sprint = {
-  sprint_number: number;
   id: string;
+  sprint_number: number;
+  sprint_name: string | null;
 };
 
 type GroupedFeedback = {
@@ -70,6 +72,7 @@ export function FeedbackDashboard() {
             *,
             retro:retrospectives(
               sprint_number,
+              sprint_name,
               team_name
             )
           `)
@@ -130,8 +133,8 @@ export function FeedbackDashboard() {
         // Get unique sprints for the filter
         const { data: retroData, error: retroError } = await supabase
           .from("retrospectives")
-          .select("id, sprint_number")
-          .order("sprint_number", { ascending: false });
+          .select("id, sprint_number, sprint_name")
+          .order("created_at", { ascending: false });
           
         if (retroError) throw retroError;
         
@@ -158,7 +161,7 @@ export function FeedbackDashboard() {
   const filteredFeedback = (type: FeedbackType) => {
     return feedbackItems.filter(item => {
       const matchesType = item.type === type;
-      const matchesSprint = selectedSprint === "all" || item.retro?.sprint_number.toString() === selectedSprint;
+      const matchesSprint = selectedSprint === "all" || item.retro_id === selectedSprint;
       return matchesType && matchesSprint;
     });
   };
@@ -205,8 +208,8 @@ export function FeedbackDashboard() {
               <SelectContent>
                 <SelectItem value="all">All Sprints</SelectItem>
                 {sprints.map(sprint => (
-                  <SelectItem key={sprint.id} value={sprint.sprint_number.toString()}>
-                    Sprint {sprint.sprint_number}
+                  <SelectItem key={sprint.id} value={sprint.id}>
+                    {sprint.sprint_name || `Sprint ${sprint.sprint_number}`}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -280,7 +283,7 @@ export function FeedbackDashboard() {
                                   {new Date(item.created_at).toLocaleString()}
                                 </div>
                                 <div className="mt-1 sm:mt-0">
-                                  {item.retro && `Sprint ${item.retro.sprint_number} • ${item.retro.team_name}`}
+                                  {item.retro && (item.retro.sprint_name || `Sprint ${item.retro.sprint_number}`) + ` • ${item.retro.team_name}`}
                                 </div>
                               </div>
                             </div>
