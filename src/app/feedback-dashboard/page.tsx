@@ -12,9 +12,11 @@ type FeedbackItem = {
   type: FeedbackType;
   created_at: string;
   user_email?: string | null;
+  retro_id?: string;
   retro?: {
     sprint_number: number;
     sprint_name: string | null;
+    team_name: string;
   } | null;
 };
 
@@ -45,9 +47,11 @@ export default function FeedbackDashboardPage() {
           message,
           type,
           created_at,
+          retro_id,
           retro:retrospectives(
             sprint_number,
-            sprint_name
+            sprint_name,
+            team_name
           )
         `)
         .order("created_at", { ascending: false });
@@ -60,9 +64,29 @@ export default function FeedbackDashboardPage() {
         message: item.message,
         type: item.type,
         created_at: item.created_at,
+        retro_id: item.retro_id,
         // Extract the first item from the retro array if it exists
         retro: item.retro && item.retro.length > 0 ? item.retro[0] : null
       }));
+      
+      // If any retro information is missing, try to fetch it directly
+      for (let i = 0; i < processedData.length; i++) {
+        if (processedData[i].retro_id && !processedData[i].retro) {
+          try {
+            const { data: retroData, error: retroError } = await supabase
+              .from("retrospectives")
+              .select("sprint_number, sprint_name, team_name")
+              .eq("id", processedData[i].retro_id)
+              .single();
+              
+            if (!retroError && retroData) {
+              processedData[i].retro = retroData;
+            }
+          } catch (err) {
+            console.warn("Error fetching retro info:", err);
+          }
+        }
+      }
       
       setFeedbackItems(processedData);
     } catch (err: any) {
@@ -80,6 +104,17 @@ export default function FeedbackDashboardPage() {
   
   // Get recent feedback (last 5 items)
   const recentFeedback = feedbackItems.slice(0, 5);
+
+  // Helper function to format sprint info
+  const formatSprintInfo = (item: FeedbackItem) => {
+    if (item.retro?.sprint_name) {
+      return item.retro.sprint_name;
+    } else if (item.retro?.sprint_number) {
+      return `Sprint ${item.retro.sprint_number}`;
+    } else {
+      return "Unknown Sprint";
+    }
+  };
 
   if (loading) {
     return (
@@ -158,7 +193,7 @@ export default function FeedbackDashboardPage() {
                     {item.message}
                   </p>
                   <p className="text-sm text-gray-500">
-                    {item.retro?.sprint_name || (item.retro?.sprint_number ? `Sprint ${item.retro.sprint_number}` : 'Unknown Sprint')}
+                    {formatSprintInfo(item)}
                     {' • '}
                     {new Date(item.created_at).toLocaleString()}
                   </p>
